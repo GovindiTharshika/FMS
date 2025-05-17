@@ -27,7 +27,7 @@ app.get('/api/servers/count', (req, res) => {
   });
 });
 
-pp.post('/api/servers', (req, res) => {
+app.post('/api/servers', (req, res) => {
   const { hostname, ipAddress, osType } = req.body;
   const sql = 'INSERT INTO servers (hostname, ip_address, os_type) VALUES (?, ?, ?)';
   db.query(sql, [hostname, ipAddress, osType], (err, result) => {

@@ -32,7 +32,7 @@ const ServerList = () => {
         >
           <option>All Servers</option>
           <option>Linux</option>
-          <option>Windows</option>
+          
           {/* Add other filter options as needed */}
         </select>
       </div>
