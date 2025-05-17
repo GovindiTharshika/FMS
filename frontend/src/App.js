@@ -5,17 +5,22 @@ import Dashboard from './components/Dashboard';
 import UpdatesPage from './components/UpdatesPage'; // Renamed from PatchManager
 import ServerManagementPage from './components/ServerManagementPage'; // Import the new page
 import ScanningPage from './components/ScanningPage'; // Import the new ScanningPage
+import AIInsights from './components/AIInsights';
 import './index.css'; // Ensure Tailwind styles are imported
 
 function App() {
-  const [activePage, setActivePage] = useState('dashboard'); // Default to dashboard
+  const [activePage, setActivePage] = useState('dashboard'); // For sidebar highlight
+  const [currentPage, setCurrentPage] = useState('dashboard'); // For displayed content
 
   const handleNavigate = (pageId) => {
-    setActivePage(pageId);
+    setCurrentPage(pageId); // Always update displayed content
+    if (pageId !== 'scanning') {
+      setActivePage(pageId); // Only update sidebar highlight if not scanning
+    }
   };
 
   let CurrentPage;
-  switch (activePage) {
+  switch (currentPage) {
     case 'dashboard':
       CurrentPage = Dashboard;
       break;
@@ -30,6 +35,9 @@ function App() {
       break;
     case 'scanning': // Added case for Scanning
       CurrentPage = ScanningPage;
+      break;
+    case 'ai-insights': // Added case for AI Insights
+      CurrentPage = AIInsights;
       break;
     // Add cases for 'history', 'settings' when those pages are built
     default:
