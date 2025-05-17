@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardOverview from './DashboardOverview';
 import PatchCompliance from './PatchCompliance';
 import RecentActivity from './RecentActivity';
 
 const Dashboard = () => {
-  // Sample data could be fetched here or passed as props
-  const overviewStats = {
-    totalServers: 10,
-    pendingUpdates: 4,
-    lastUpdate: 'May 12, 2025, 10:00 AM',
-  };
+  const [overviewStats, setOverviewStats] = useState({
+    totalServers: 0,
+    pendingUpdates: 0,
+    lastUpdate: 'Loading...',
+  });
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/servers/count')
+      .then(res => res.json())
+      .then(data => {
+        setOverviewStats(prev => ({
+          ...prev,
+          totalServers: data.totalServers,
+          lastUpdate: new Date().toLocaleString(), // or fetch this from backend if needed
+        }));
+      })
+      .catch(err => console.error('Failed to fetch total servers:', err));
+  }, []);
 
   const patchComplianceData = {
     appliedPercentage: 70,
@@ -37,4 +49,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

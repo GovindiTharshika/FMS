@@ -6,20 +6,50 @@ const ServerDetailsForm = () => {
   const [osType, setOsType] = useState('Linux');
   const [authToken, setAuthToken] = useState('');
   const [action, setAction] = useState('Add Server');
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic (e.g., API call)
-    console.log({ hostname, ipAddress, osType, authToken, action });
-    // Reset form or provide feedback to user
+  const serverData = {
+    hostname,
+    ipAddress,
+    osType,
   };
+
+  try {
+    const response = await fetch('http://localhost:3001/api/servers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(serverData),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert('Server added successfully!');
+      // Reset form
+      setHostname('');
+      setIpAddress('');
+      setOsType('Linux');
+      setAuthToken('');
+      setAction('Add Server');
+    } else {
+      alert(`Error: ${result.error}`);
+    }
+  } catch (error) {
+    console.error('Request failed:', error);
+    alert('Failed to add server. Check console for details.');
+  }
+};
+
+
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h3 className="text-xl font-semibold text-gray-700 mb-6">Server Details</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="hostname" className="block text-sm font-medium text-gray-700 mb-1">Hostname</label>
+          <label htmlFor="hostname" className="block text-sm font-medium text-gray-700 mb-1">Host Name</label>
           <input 
             type="text" 
             name="hostname" 
